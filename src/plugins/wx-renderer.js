@@ -15,10 +15,10 @@ class WxRenderer {
 
 
     //const cssTheme = "highlight.js/styles/github.css";
-    //const cssTheme = opts.cssTheme ? opts.cssTheme : "github";
+    const cssTheme = opts.cssTheme ? opts.cssTheme : "github";
 
-    //  require(cssTheme);
-    //require(`highlight.js/styles/${cssTheme}.css`);
+    //  require(cssTheme);atom-one-dark.css
+  //  require(`highlight.js/styles/${cssTheme}.css`);
 
 
     let ENV_STRETCH_IMAGE = true;
@@ -186,16 +186,18 @@ class WxRenderer {
         return `<blockquote ${getStyles("blockquote")}>${text}</blockquote>`;
       };
       renderer.code = (text, lang) => {
-        text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+       // text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const codeLines = text
           .split("\n")
           .map(
             (line, index) =>
-              `<code class="${lang}" data-id="${index}">${
+              `<p class="${lang}" data-id="${index}">${
                 hljs.highlightAuto(line).value
-              } </code>`
+              } </p>`
           )
         ;
+
+
         const codeTheme = "github";
         return ` <div style="border-radius: 5px;box-shadow: rgb(0 0 0 / 55%) 0px 2px 10px;" class="code-body">
                    <div class="language-java hljs " style="border-radius: 5px 5px 0 0;display: flex;flex-direction: row;justify-content: space-between;height: 30px;line-height: 30px;">
@@ -203,7 +205,7 @@ class WxRenderer {
                       <div style="display: none;border-radius: 5px;text-align: center;font-family: Consolas,Menlo,Courier,monospace;color:#000;;height: 30px;width: 60px;background: #ffffff;opacity: 0.5;cursor: pointer" class="copy-code">复制</div>
                    </div>
                      <pre class="language-java hljs" style="padding: 10px;display: flex;flex-direction: column;justify-content: flex-start;border-radius:0 0 5px 5px;">
-                        ${codeLines.join("")}
+                        <code>${codeLines.join("")}</code>
                      </pre>
 
                 </div>

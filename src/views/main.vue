@@ -188,9 +188,9 @@
       <a-layout-content class="CodeView"
                         :style="{ margin: '10px 10px', padding: '10px', background: '#fff', minHeight: '280px' }"
       >
-        <keep-alive>
+        <!--<keep-alive> </keep-alive> -->
           <router-view :key="$route.fullPath"/>
-        </keep-alive>
+
 
         <div v-if="routerInit" style="height: 100%;line-height: 100%;text-align: center;width: 100%">
 
@@ -256,7 +256,7 @@ import {Icon} from 'ant-design-vue';
 import G6 from '@antv/g6';
 import fetch from "../api/fetch";
 import service from "../api/fetch";
-
+import utils from "../utils/utils";
 const {Util} = G6;
 
 export default {

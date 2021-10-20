@@ -10,6 +10,11 @@ const router = new VueRouter({
       redirect: "/main"
     },
     {
+      path:"/markdown/**",
+      name:"markdownEditor",
+      component:()=>import('../views/markdown/markdown-code')
+    },
+    {
       path: '/main',
       name: 'main',
       component: () => import('../views/main'),

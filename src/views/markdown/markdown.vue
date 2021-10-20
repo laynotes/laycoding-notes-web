@@ -219,14 +219,14 @@ export default {
       //_this.imgClick(e, e.currentTarget.currentSrc)
     });
     $("#output").delegate(".copy-code", "click", function (e) {
-      const codeNodes = e.currentTarget.parentNode.parentNode.querySelectorAll("code");
-      let code = '';
+      const codeNodes = e.currentTarget.parentNode.parentNode.querySelector("code");
+     /* let code = '';
       codeNodes.forEach(item => {
         let str = item.innerText.replace(/\r\n/g, " ");
         str = str.replace(/\n/g, " ");
         code += str + "\n";
-      })
-      utils.copy(code, e, _this);
+      })*/
+      utils.copy(codeNodes.innerText, e, _this);
     })
 
     if (document.getElementById("output-wrapper")) {
@@ -286,9 +286,9 @@ export default {
               return hljs.highlightAuto(code).value;
             }
           });
-          this.removeCss(this.cssName);
+         // this.removeCss(this.cssName);
           this.cssName = option.themeType;
-          this.loadCss();
+        //  this.loadCss();
           this.html = output;
           this.mdTitle = JSON.parse(localStorage.getItem("md_title_data"));
           this.initMd = false;

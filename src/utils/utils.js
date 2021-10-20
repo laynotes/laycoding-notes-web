@@ -1,5 +1,5 @@
 import copyText from "../plugins/clipboard";
-import uuid from "vue-uuid"
+
 import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
 

@@ -10,7 +10,7 @@
 export default {
   name: 'App',
   created() {
-    //  window.addEventListener("unload",this.saveState);
+     window.addEventListener("unload",this.saveState);
   },
   data() {
     return {

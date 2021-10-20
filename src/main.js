@@ -16,7 +16,11 @@ import ElementUI from "element-ui";
 import Viewer from 'v-viewer';
 import 'viewerjs/dist/viewer.css';
 
+import uuid from "vue-uuid"
+import leMarkdownEditor from 'le-markdown-editor'
+Vue.use(leMarkdownEditor);
 
+Vue.use(uuid);
 Vue.use(ElementUI);
 Vue.use(Viewer);
 Vue.prototype.$http = axios
