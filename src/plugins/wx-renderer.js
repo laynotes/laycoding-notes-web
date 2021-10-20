@@ -10,7 +10,16 @@ class WxRenderer {
     console.log(opts);
     localStorage.setItem("opt_config", JSON.stringify(opts));
 
-    require("highlight.js/styles/github.css");
+
+    //const fileConfig = JSON.stringify(opts);
+
+
+    //const cssTheme = "highlight.js/styles/github.css";
+    //const cssTheme = opts.cssTheme ? opts.cssTheme : "github";
+
+    //  require(cssTheme);
+    //require(`highlight.js/styles/${cssTheme}.css`);
+
 
     let ENV_STRETCH_IMAGE = true;
 
@@ -105,11 +114,8 @@ class WxRenderer {
 
     this.getRenderer = (status) => {
 
-      console.log("status->", status)
-
       footnotes = [];
       footnoteIndex = 0;
-
 
       hljs.initHighlighting();
 
@@ -117,7 +123,6 @@ class WxRenderer {
 
       hljs.registerLanguage("java", java);
       hljs.registerLanguage("xml", xml);
-
 
       styleMapping = this.buildTheme(this.opts.theme);
       let renderer = new marked.Renderer();
@@ -187,15 +192,11 @@ class WxRenderer {
           .map(
             (line, index) =>
               `<code class="${lang}" data-id="${index}">${
-                hljs.highlight(line, {language: 'java'}).value
+                hljs.highlightAuto(line).value
               } </code>`
           )
         ;
-
         const codeTheme = "github";
-
-        //   text = "//代码\n" + text;
-
         return ` <div style="border-radius: 5px;box-shadow: rgb(0 0 0 / 55%) 0px 2px 10px;" class="code-body">
                    <div class="language-java hljs " style="border-radius: 5px 5px 0 0;display: flex;flex-direction: row;justify-content: space-between;height: 30px;line-height: 30px;">
                       <span style="display: block; background: url(${require('@/assets/svg/mac.svg')}); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span>

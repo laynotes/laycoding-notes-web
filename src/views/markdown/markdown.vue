@@ -154,6 +154,7 @@ export default {
   data() {
     return {
       html: '',
+      cssName: "github",
       mdContent: '',
       list: [],
       initMd: true,
@@ -236,6 +237,31 @@ export default {
 
   },
   methods: {
+    //<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    loadCss() {
+      let element = document.createElement("link");
+      element.setAttribute("rel", "stylesheet");
+      element.setAttribute("type", "text/css");
+      element.setAttribute(
+        "href",
+        `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/${this.cssName}.min.css`
+      );
+      document.getElementsByTagName("head")[0].appendChild(element);
+    },
+    removeCss(cssName) {
+      let element = "link";
+      let attr = "href";
+      let elements = document.getElementsByTagName(element);
+      for (let i = elements.length; i >= 0; i--) {
+        if (
+          elements[i] &&
+          elements[i].getAttribute(attr) != null &&
+          elements[i].getAttribute(attr).indexOf(cssName) !== -1
+        ) {
+          elements[i].parentNode.removeChild(elements[i]);
+        }
+      }
+    },
     getFileInfo(fileId) {
       fetch({
         url: "/file/getFileInfoById?fileId=" + fileId,
@@ -244,17 +270,13 @@ export default {
         console.log(response.data)
         if (response.code === 0) {
           // this.fileList = response.data;
-
           this.mdContent = response.data.fileSource;
-
           const option = response.data.fileConfig;
-
           this.fileTitle = response.data.fileName;
-
           // this.mdContent = formatDoc(this.mdContent);
-
           let output = marked(this.mdContent, {
             renderer: new WxRenderer({
+              cssTheme: option.themeType,
               theme: option.theme,
               fonts: option.currentFont,
               size: option.currentSize,
@@ -264,7 +286,9 @@ export default {
               return hljs.highlightAuto(code).value;
             }
           });
-
+          this.removeCss(this.cssName);
+          this.cssName = option.themeType;
+          this.loadCss();
           this.html = output;
           this.mdTitle = JSON.parse(localStorage.getItem("md_title_data"));
           this.initMd = false;
