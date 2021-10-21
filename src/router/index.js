@@ -12,7 +12,7 @@ const router = new VueRouter({
     {
       path:"/markdown/**",
       name:"markdownEditor",
-      component:()=>import('../views/markdown/markdown-code')
+      component:()=>import('../views/markdown/markdown-editor')
     },
     {
       path: '/main',
