@@ -1,17 +1,17 @@
 <template>
   <div id="editor-main">
 
-    <Spin size="large"  fix v-if="initMd"></Spin>
+    <Spin size="large" fix v-if="initMd"></Spin>
 
-    <lay-editor v-model="value" ref="editor"  :image-uploader="imageUploader"
+    <lay-editor v-model="value" ref="editor" :image-uploader="imageUploader"
                 @save="save"></lay-editor>
 
     <a-modal
-        title="保存笔记"
-        :dialog-style="{ top: '50px' }"
-        :visible="modal1Visible"
-        @ok="saveInfo"
-        @cancel="() => setModal1Visible(false)"
+      title="保存笔记"
+      :dialog-style="{ top: '50px' }"
+      :visible="modal1Visible"
+      @ok="saveInfo"
+      @cancel="() => setModal1Visible(false)"
     >
       <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
         <a-form-item label="标 题">
@@ -21,13 +21,13 @@
         </a-form-item>
         <a-form-item label="归 档">
           <a-tree-select
-              v-model="folderName"
-              show-search
-              style="width: 100%"
-              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              placeholder="所属归档"
-              allow-clear
-              tree-default-expand-all
+            v-model="folderName"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="所属归档"
+            allow-clear
+            tree-default-expand-all
           >
             <a-tree-select-node v-for="item in folderTree"
                                 :selectable="item.children === null ||  item.children.length ===0" :key="item.id"
@@ -150,7 +150,7 @@ export default {
         console.log(response.data)
         if (response.data) {
           this.value = response.data.fileSource;
-          localStorage.setItem("code_theme",response.data.fileConfig.themeType);
+          localStorage.setItem("code_theme", response.data.fileConfig.themeType);
           setTimeout(() => {
             this.isEditor = true;
             this.initMd = false;
