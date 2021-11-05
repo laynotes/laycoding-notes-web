@@ -2,36 +2,22 @@ import marked from "marked";
 import hljs from "highlight.js";
 import javascript from 'highlight.js/lib/languages/javascript';
 import java from 'highlight.js/lib/languages/java';
-import xml from "highlight.js/lib/languages/xml"
+import html from "highlight.js/lib/languages/xml"
+import sql from "highlight.js/lib/languages/sql";
 
 class WxRenderer {
   constructor(opts) {
     this.opts = opts;
-    console.log(opts);
     localStorage.setItem("opt_config", JSON.stringify(opts));
-
-
-    //const fileConfig = JSON.stringify(opts);
-
-
-    //const cssTheme = "highlight.js/styles/github.css";
     const cssTheme = opts.cssTheme ? opts.cssTheme : "github";
-
-    //  require(cssTheme);atom-one-dark.css
-  //  require(`highlight.js/styles/${cssTheme}.css`);
-
-
     let ENV_STRETCH_IMAGE = true;
-
     let footnotes = [];
     let footnoteIndex = 0;
     let styleMapping = null;
-
     const CODE_FONT_FAMILY =
       "Menlo, Operator Mono, Consolas, Monaco, monospace";
 
     let merge = (base, extend) => Object.assign({}, base, extend);
-
     this.buildTheme = (themeTpl) => {
       let mapping = {};
       let base = merge(themeTpl.BASE, {
@@ -117,13 +103,6 @@ class WxRenderer {
       footnotes = [];
       footnoteIndex = 0;
 
-      hljs.initHighlighting();
-
-      hljs.registerLanguage("javascript", javascript);
-
-      hljs.registerLanguage("java", java);
-      hljs.registerLanguage("xml", xml);
-
       styleMapping = this.buildTheme(this.opts.theme);
       let renderer = new marked.Renderer();
       const mdTitle = [];
@@ -159,7 +138,6 @@ class WxRenderer {
           arr.pop();
           arr.push(node);
         }
-
         localStorage.setItem("md_title_data", JSON.stringify(arr));
         switch (level) {
           case 1:
@@ -186,30 +164,23 @@ class WxRenderer {
         return `<blockquote ${getStyles("blockquote")}>${text}</blockquote>`;
       };
       renderer.code = (text, lang) => {
-       // text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        const codeLines = text
-          .split("\n")
-          .map(
-            (line, index) =>
-              `<p class="${lang}" data-id="${index}">${
-                hljs.highlightAuto(line).value
-              } </p>`
-          )
-        ;
+        const langArr = ["java", "xml", "javascript", "sql", "bash", "c++", "go", "php", "css", "json", "python", "shell"]
 
-
-        const codeTheme = "github";
-        return ` <div style="border-radius: 5px;box-shadow: rgb(0 0 0 / 55%) 0px 2px 10px;" class="code-body">
-                   <div class="language-java hljs " style="border-radius: 5px 5px 0 0;display: flex;flex-direction: row;justify-content: space-between;height: 30px;line-height: 30px;">
-                      <span style="display: block; background: url(${require('@/assets/svg/mac.svg')}); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span>
+        if (lang == null || lang === "" || lang === undefined) {
+          lang = "java";
+        }
+        if (langArr.indexOf(lang) === -1) {
+          lang = "java";
+        }
+        return `<pre class="hljs code-body" style="border-radius: 5px;box-shadow: rgb(0 0 0 / 55%) 0px 2px 10px;display: flex;flex-direction: column;justify-content: flex-start;border-radius:5px;">
+                       <div class="hljs " style="border-radius: 5px 5px 0 0;display: flex;flex-direction: row;justify-content: space-between;height: 30px;line-height: 30px;">
+                      <span style="display: block; background: url('https://laycoding.gitee.io/study-docs/assets/img/mac.svg'); height: 30px; width: 100%; background-size: 40px; background-repeat: no-repeat; margin-bottom: -7px; border-radius: 5px; background-position: 10px 10px;"></span>
                       <div style="display: none;border-radius: 5px;text-align: center;font-family: Consolas,Menlo,Courier,monospace;color:#000;;height: 30px;width: 60px;background: #ffffff;opacity: 0.5;cursor: pointer" class="copy-code">复制</div>
-                   </div>
-                     <pre class="language-java hljs" style="padding: 10px;display: flex;flex-direction: column;justify-content: flex-start;border-radius:0 0 5px 5px;">
-                        <code>${codeLines.join("")}</code>
+                       </div>
+                        <code  class="language-${lang} hljs">${hljs.highlightAuto(text).value}</code>
                      </pre>
-
-                </div>
             `;
+
       };
       renderer.codespan = (text, lang) =>
         `<code ${getStyles("codespan")}>${text}</code>`;
@@ -243,6 +214,15 @@ class WxRenderer {
         return `<figure ${figureStyles}><img ${imgStyles} src="${href}" title="${title}" data-original="${href}" alt="${text}"/>${subText}</figure>`;
       };
       renderer.link = (href, title, text) => {
+
+        if (href !== null && href !== "" && text !== null && text !== "") {
+          return `<a href="${href}" title="${title || text}" ${getStyles(
+            "wx_link"
+          )}>${text}</a>`;
+        }
+
+        console.log(href,title,text);
+
         if (href.startsWith("https://mp.weixin.qq.com")) {
           return `<a href="${href}" title="${title || text}" ${getStyles(
             "wx_link"

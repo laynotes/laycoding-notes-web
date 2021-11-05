@@ -8,102 +8,108 @@ let isLock = false;
 let requestsArr = [];
 
 const service = axios.create({
-    baseURL: "http://127.0.0.1:8088",
-    timeout: 15 * 1000, // 请求超时时间
+  baseURL: "https://docs.laycoding.com/api",
+  timeout: 15 * 1000, // 请求超时时间
 });
 
 service.interceptors.request.use(
-    (config) => {
-        if (/^(post)|(put)|(delete)$/i.test(config.method)) {
-            if (config.data && config.data.upload) {
-                config.headers["Content-Type"] = "multipart/form-data";
-            }
+  (config) => {
 
-            return config;
-        }
-        config.url = config.url.indexOf(config.baseURL) > -1 ? config.url : config.baseURL + config.url;
-        if (config.url.indexOf("/oauth/") > -1) {
-            return config;
-        }
-        if (sessionStorage.getItem("state")) {
-            const state = JSON.parse(sessionStorage.getItem("state"));
-            if (state.userInfo && state.userInfo.token != null) {
-                config.headers.Authorization = "Bearer " + state.userInfo.token;
-            }
-        }
-
-        if (isLock && config.url.indexOf("/oauth/refresh") > -1) {
-
-            const retry = new Promise((resolve, reject) => {
-                //(token) => {...}这个函数就是回调函数
-                subscribeTokenRefresh((token) => {
-                    config.headers.Authorization = 'Bearer ' + token
-                    //将请求挂起
-                    resolve(config)
-                })
-            })
-            return retry
-        }
+    if (/^(post)|(put)|(delete)$/i.test(config.method)) {
+      if (config.data && config.data.upload) {
+        config.headers["Content-Type"] = "multipart/form-data";
         return config;
-    },
-    (error) => {
-        Promise.reject(error);
+      }
     }
+    config.url = config.url.indexOf(config.baseURL) > -1 ? config.url : config.baseURL + config.url;
+    if (config.url.indexOf("/oauth/") > -1) {
+      console.log("config->"+JSON.stringify(config));
+      return config;
+    }
+    if (sessionStorage.getItem("state")) {
+      const state = JSON.parse(sessionStorage.getItem("state"));
+      if (state.userInfo && state.userInfo.token != null) {
+        config.headers.Authorization = "Bearer " + state.userInfo.token;
+      }
+    }
+
+    if (isLock && config.url.indexOf("/oauth/refresh") === -1) {
+
+      const retry = new Promise((resolve, reject) => {
+        //(token) => {...}这个函数就是回调函数
+        subscribeTokenRefresh((token) => {
+          config.headers.Authorization = 'Bearer ' + token
+          //将请求挂起
+          resolve(config)
+        })
+      })
+      return retry
+    }
+    if (isLock && config.url.indexOf("/oauth/refresh") >-1){
+      return config
+    }else if (isLock) {
+      Promise.reject(config);
+    }
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
 );
 const subscribeTokenRefresh = (cb) => {
-    requestsArr.push(cb);
-    console.log("挂起的请求:" + requestsArr.length)
+  requestsArr.push(cb);
+  console.log("挂起的请求:" + requestsArr.length)
 }
 const onRrefreshed = (token) => {
-    requestsArr.map(cb => cb(token));
+  requestsArr.map(cb => cb(token));
 }
 let that = this;
 
 service.interceptors.response.use(
-    (res) => {
-        if (res.data.code === 0 || res.data.success) {
-            return res.data ? res.data : Promise.reject(res);
-        }
-        const userInfo = sessionStorage.getItem("state") ? JSON.parse(sessionStorage.getItem("state")).userInfo : null;
-        if (res.data.code === 401 && !isLock && userInfo != null) {
+  (res) => {
+    if (res.data.code === 0 || res.data.success) {
+      return res.data ? res.data : Promise.reject(res);
+    }
+    const userInfo = sessionStorage.getItem("state") ? JSON.parse(sessionStorage.getItem("state")).userInfo : null;
+    if (res.data.code === 401 && !isLock && userInfo != null) {
 
-            new Promise((resolve, reject) => {
-                refreshToken(userInfo.refreshToken);
-            }).then(respones => {
-            });
-            //  console.log("res:",res.config)
-            var axiosPromise = service(res.config);
-            isLock = false;
-            return axiosPromise;
-        }
-        return res.data ? res.data : Promise.reject(res);
-    },
-    (error) => Promise.reject(error)
+      new Promise((resolve, reject) => {
+        refreshToken(userInfo.refreshToken);
+      }).then(respones => {
+        var axiosPromise = service(res.config);
+        isLock = false;
+        return axiosPromise;
+      });
+      //  console.log("res:",res.config)
+    }
+    return res.data ? res.data : Promise.reject(res);
+  },
+  (error) => Promise.reject(error)
 );
 const refreshToken = (token) => {
-    if (token === null || token === "") {
+  if (token === null || token === "") {
 
-        return;
-    }
-    service({
-        url: "/oauth/refresh?refreshToken=" + token,
-        method: "post"
-    }).then(reponse => {
-        const storage = sessionStorage.getItem("state");
-        const obj = sessionStorage.getItem("state") ? JSON.parse(storage) : {};
-        obj.userInfo = reponse.data;
-        sessionStorage.setItem("state", JSON.stringify(obj));
-        //store.state = obj;
-        store.commit("setUserInfo", reponse.data);
-        // store.userInfo = reponse.data;
-        isLock = false;//释放锁
-        onRrefreshed(reponse.data.token);
-        //清空数组中保存的请求
-        requestsArr = [];
-    }).catch(erro => {
-        console.log(erro);
-        sessionStorage.clear();
-    })
+    return;
+  }
+  service({
+    url: "/oauth/refresh?refreshToken=" + token,
+    method: "post"
+  }).then(reponse => {
+    const storage = sessionStorage.getItem("state");
+    const obj = sessionStorage.getItem("state") ? JSON.parse(storage) : {};
+    obj.userInfo = reponse.data;
+    sessionStorage.setItem("state", JSON.stringify(obj));
+    //store.state = obj;
+    store.commit("setUserInfo", reponse.data);
+    // store.userInfo = reponse.data;
+    isLock = false;//释放锁
+    onRrefreshed(reponse.data.token);
+    //清空数组中保存的请求
+    requestsArr = [];
+  }).catch(erro => {
+    console.log(erro);
+    sessionStorage.clear();
+  })
 };
 /*
 request1.interceptors.response.use(function (response) {

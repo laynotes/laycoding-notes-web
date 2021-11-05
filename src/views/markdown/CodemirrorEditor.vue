@@ -1,101 +1,95 @@
 <template>
-  <div class="container" :class="{ container_night: nightMode }">
-    <el-container>
-      <el-header class="editor__header">
-        <editor-header
-          ref="header"
-          @refresh="onEditorRefresh"
-          @cssChanged="cssChanged"
-          @download="downloadEditorContent"
-          @showCssEditor="showCssEditor = !showCssEditor"
-          @show-about-dialog="aboutDialogVisible = true"
-          @show-dialog-form="dialogFormVisible = true"
-          @show-dialog-upload-img="dialogUploadImgVisible = true"
-          @startCopy="(isCoping = true), (backLight = true)"
-          @endCopy="endCopy"
-        />
-      </el-header>
-      <el-main class="main-body">
-        <el-row class="main-section">
-          <el-col
-            :span="12"
-            class="codeMirror-wrapper"
-            @contextmenu.prevent.native="openMenu($event)"
-          >
+    <div class="container" :class="{ container_night: nightMode }">
+      <el-container>
+        <el-header class="editor__header">
+          <editor-header
+              ref="header"
+              @refresh="onEditorRefresh"
+              @cssChanged="cssChanged"
+              @download="downloadEditorContent"
+              @showCssEditor="showCssEditor = !showCssEditor"
+              @show-about-dialog="aboutDialogVisible = true"
+              @show-dialog-form="dialogFormVisible = true"
+              @show-dialog-upload-img="dialogUploadImgVisible = true"
+              @startCopy="(isCoping = true), (backLight = true)"
+              @endCopy="endCopy"
+          />
+        </el-header>
+        <el-main class="main-body">
+          <el-row class="main-section">
+            <el-col
+                :span="12"
+                class="codeMirror-wrapper"
+                @contextmenu.prevent.native="openMenu($event)"
+            >
             <textarea
-              id="editor"
-              type="textarea"
-              placeholder="Your markdown text here."
-              v-model="source"
+                id="editor"
+                type="textarea"
+                placeholder="Your markdown text here."
+                v-model="source"
             >
             </textarea>
-          </el-col>
-          <el-col
-            :span="12"
-            class="preview-wrapper"
-            id="preview" style="position: relative!important;"
-            ref="preview"
-            :class="{
+            </el-col>
+            <el-col
+                :span="12"
+                class="preview-wrapper"
+                id="preview"
+                ref="preview"
+                :class="{
               'preview-wrapper_night': nightMode && isCoping,
             }"
-          >
-
-            <section
-              id="output-wrapper"
-              :class="{ output_night: nightMode && !backLight }"
             >
-              <div class="preview">
-                <section id="output" v-html="output"></section>
-                <div class="loading-mask" v-if="nightMode && isCoping">
-                  <div class="loading__img"></div>
-                  <span>正在生成</span>
+              <section
+                  id="output-wrapper"
+                  :class="{ output_night: nightMode && !backLight }"
+              >
+                <div class="preview">
+                  <section id="output" v-html="output"></section>
+                  <div class="loading-mask" v-if="nightMode && isCoping">
+                    <div class="loading__img"></div>
+                    <span>正在生成</span>
+                  </div>
                 </div>
-              </div>
-
-            </section>
-
-            <div class="back-top" v-if="topShow" @click="toBackTop">
-              <a-icon type="arrow-up" style="font-size:28px;color: #fff;margin: auto"/>
-            </div>
-          </el-col>
-          <transition
-            name="custom-classes-transition"
-            enter-active-class="bounceInRight"
-          >
-            <el-col
-              id="cssBox"
-              v-show="showCssEditor"
-              :span="12"
-              class="cssEditor-wrapper"
+              </section>
+            </el-col>
+            <transition
+                name="custom-classes-transition"
+                enter-active-class="bounceInRight"
             >
+              <el-col
+                  id="cssBox"
+                  v-show="showCssEditor"
+                  :span="12"
+                  class="cssEditor-wrapper"
+              >
               <textarea
-                id="cssEditor"
-                type="textarea"
-                placeholder="Your custom css here."
+                  id="cssEditor"
+                  type="textarea"
+                  placeholder="Your custom css here."
               >
               </textarea>
-            </el-col>
-          </transition>
-        </el-row>
-      </el-main>
-    </el-container>
-    <upload-img-dialog
-      v-model="dialogUploadImgVisible"
-      @close="dialogUploadImgVisible = false"
-      @beforeUpload="beforeUpload"
-      @uploadImage="uploadImage"
-      @uploaded="uploaded"
-    />
-    <about-dialog v-model="aboutDialogVisible"/>
-    <insert-form-dialog v-model="dialogFormVisible"/>
-    <right-click-menu
-      v-model="rightClickMenuVisible"
-      :left="mouseLeft"
-      :top="mouseTop"
-      @menuTick="onMenuEvent"
-      @closeMenu="closeRightClickMenu"
-    />
-  </div>
+              </el-col>
+            </transition>
+          </el-row>
+        </el-main>
+      </el-container>
+      <upload-img-dialog
+          v-model="dialogUploadImgVisible"
+          @close="dialogUploadImgVisible = false"
+          @beforeUpload="beforeUpload"
+          @uploadImage="uploadImage"
+          @uploaded="uploaded"
+      />
+      <about-dialog v-model="aboutDialogVisible"/>
+      <insert-form-dialog v-model="dialogFormVisible"/>
+      <right-click-menu
+          v-model="rightClickMenuVisible"
+          :left="mouseLeft"
+          :top="mouseTop"
+          @menuTick="onMenuEvent"
+          @closeMenu="closeRightClickMenu"
+      />
+    </div>
 
 </template>
 <script>
@@ -106,20 +100,22 @@ import rightClickMenu from "../../components/codemirror/rightClickMenu";
 import uploadImgDialog from "../../components/codemirror/uploadImgDialog";
 
 import {
-  checkImage,
   css2json,
-  customCssWithTemplate,
   downloadMD,
   formatDoc,
-  saveEditorContent,
   setFontSize,
-  toBase64,
-} from "../../assets/scripts/util";
+  saveEditorContent,
+  customCssWithTemplate,
+  checkImage,
+} from "@/assets/scripts/util";
+
+import {toBase64} from "@/assets/scripts/util";
 import fileApi from "../../api/file";
-import {mapMutations, mapState} from "vuex";
-import 'highlight.js/styles/monokai-sublime.css';
 
 require("codemirror/mode/javascript/javascript");
+import {mapState, mapMutations} from "vuex";
+
+import 'highlight.js/styles/monokai-sublime.css';
 
 export default {
   data() {
@@ -136,8 +132,6 @@ export default {
       source: "",
       mouseLeft: 0,
       mouseTop: 0,
-      output: '',
-      topShow: false
     };
   },
   components: {
@@ -150,6 +144,7 @@ export default {
   computed: {
     ...mapState({
       wxRenderer: (state) => state.wxRenderer,
+      output: (state) => state.output,
       editor: (state) => state.editor,
       cssEditor: (state) => state.cssEditor,
       currentSize: (state) => state.currentSize,
@@ -165,32 +160,10 @@ export default {
       this.initCssEditor();
       this.onEditorRefresh();
     });
-    console.log("token", sessionStorage.getItem("token"));
-
-  //  document.getElementById("preview").addEventListener('scroll', this.handleScroll);
+    console.log("token",sessionStorage.getItem("token"));
   },
 
   methods: {
-    handleScroll(){
-      console.log("滑动")
-      let scrollTop = document.getElementById("preview").scrollTop;
-      if (scrollTop > 100) {
-        this.topShow = true;
-      } else {
-        this.topShow = false;
-      }
-    },
-    toBackTop() {
-      this.topShow = false;
-      let top = document.getElementById("preview").scrollTop;
-      // 实现滚动效果
-      const timeTop = setInterval(() => {
-        document.getElementById("preview").scrollTop = document.getElementById("preview").scrollTop = top -= 100;
-        if (top <= 0) {
-          clearInterval(timeTop);
-        }
-      }, 3);
-    },
     initEditor() {
       this.initEditorEntity();
       this.editor.on("change", (cm, e) => {
@@ -268,7 +241,7 @@ export default {
       localStorage.setItem("imgHost", imgHost);
 
       const config = localStorage.getItem(`${imgHost}Config`);
-      const isValidHost = imgHost === "default" || config;
+      const isValidHost = imgHost == "default" || config;
       if (!isValidHost) {
         this.$message.error(`请先配置 ${imgHost} 图床参数`);
         return false;
@@ -278,19 +251,19 @@ export default {
     uploadImage(file) {
       this.isImgLoading = true;
       toBase64(file)
-        .then((base64Content) => {
-          fileApi
-            .fileUpload(base64Content, file)
-            .then((url) => {
-              this.uploaded(url);
-            })
-            .catch((err) => {
-              this.$message.error("上传失败");
-            });
-        })
-        .catch((err) => {
-          this.$message.error(err.message);
-        });
+          .then((base64Content) => {
+            fileApi
+                .fileUpload(base64Content, file)
+                .then((url) => {
+                  this.uploaded(url);
+                })
+                .catch((err) => {
+                  this.$message.error(err.message);
+                });
+          })
+          .catch((err) => {
+            this.$message.error(err.message);
+          });
       this.isImgLoading = false;
     },
     // 图片上传结束
@@ -302,7 +275,8 @@ export default {
       this.dialogUploadImgVisible = false;
       // 上传成功，获取光标
       const cursor = this.editor.getCursor();
-      const markdownImage = `![](${response})`;
+      const imageUrl = response;
+      const markdownImage = `![](${imageUrl})`;
       // 将 Markdown 形式的 URL 插入编辑框光标所在位置
       this.editor.replaceSelection(`\n${markdownImage}\n`, cursor);
       this.$message.success("图片上传成功");
@@ -331,18 +305,15 @@ export default {
         }
 
         let percentage =
-          source.scrollTop / (source.scrollHeight - source.offsetHeight);
+            source.scrollTop / (source.scrollHeight - source.offsetHeight);
         let height = percentage * (target.scrollHeight - target.offsetHeight);
 
         target.scrollTo(0, height);
       };
       const editorScrollCB = () => {
-      //  this.topShow = true;
-        this.handleScroll();
         scrollCB("editor");
       };
       const previewScrollCB = () => {
-        this.handleScroll();
         scrollCB("preview");
       };
 
@@ -353,7 +324,6 @@ export default {
     onEditorRefresh() {
       this.editorRefresh();
       /* setTimeout(() => PR.prettyPrint(), 0);*/
-      this.output = localStorage.getItem("html");
     },
     // 复制结束
     endCopy() {
@@ -448,21 +418,6 @@ export default {
   height: 100%;
 }
 
-.back-top {
-  width: 45px;
-  height: 40px;
-  border-radius: 2px;
-  line-height: 40px;
-  text-align: center;
-  background: rgba(0, 0, 0, .6);
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
 .main-body {
   padding-top: 12px;
   overflow: hidden;
@@ -481,10 +436,6 @@ export default {
 
 .textarea-wrapper {
   height: 100%;
-}
-
-.preview-wrapper {
-  position: relative;
 }
 
 .preview-wrapper_night {

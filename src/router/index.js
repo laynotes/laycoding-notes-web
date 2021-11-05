@@ -4,15 +4,19 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
+  mode:'history',
   routes: [
     {
       path: '*',
       redirect: "/main"
     },
     {
-      path:"/markdown/**",
-      name:"markdownEditor",
-      component:()=>import('../views/markdown/markdown-code')
+      path: "/markdown/**",
+      name: "markdownEditor",
+      component: () => import('../views/markdown/markdown-code'),
+      meta: {
+        title: "markdown | 来码笔记"
+      }
     },
     {
       path: '/main',
@@ -23,10 +27,15 @@ const router = new VueRouter({
           path: "/notes/markdownView/**",
           name: "markdownView",
           component: () => import("../views/markdown/markdown")
+        },
+        {
+          path: "/notes/error",
+          name: "error",
+          component: () => import("../views/common/error")
         }
       ],
       meta: {
-        title: 'main'
+        title: '来码笔记'
       }
     }
   ]
@@ -37,12 +46,11 @@ const router = new VueRouter({
 // 写上next()路由才会跳转
 // 可以拦截登录，如果meta里配置了需要登录，则重定向到'/login'页面
 router.beforeEach((to, from, next) => {
-  /* if (to.meta.perm) {
-        // next('/403')
-       // next('/login')
-    } else {
-       // next()
-    }*/
+  if (to.meta.title) {
+    document.title = to.meta.title
+  } else {
+    document.title = '来码笔记';
+  }
   next();
 })
 

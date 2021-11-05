@@ -6,7 +6,7 @@
       <a-col :sm="24" :md="20" :lg="20" :xl="20" style="padding: 10px;height: 100%;">
         <div style="display: flex;flex-direction: column;height: 100%">
           <div
-            style="width: 100%;height: 50px;border-bottom: 1px solid #e8e8e8;line-height: 50px;display: flex;justify-content: space-between">
+              style="width: 100%;height: 50px;border-bottom: 1px solid #e8e8e8;line-height: 50px;display: flex;justify-content: space-between">
             <div>
 
             </div>
@@ -31,7 +31,7 @@
             </div>
           </div>
           <section
-            id="output-wrapper"
+              id="output-wrapper"
           >
             <div class="preview_html" id="previewHtml">
               <div id="output" v-html="html" ref="mdHtml"></div>
@@ -49,19 +49,16 @@
             <a-tab-pane key="1" tab="目录">
               <div style="position: relative;height: 100%">
 
-                <a-anchor :affix="false" @click="handelClick" style="height: 100%" @change="onChange"
+                <a-anchor :affix="false" @click="handelClick" style="height: 100%;" @change="onChange"
                           :getContainer="() => this.view">
 
                   <a-anchor-link v-for="item in mdTitle"
                                  :key="item.id"
                                  :href="item.path"
                                  :title="item.title">
-
-                    <template v-for="node in item.children">
-                      <a-anchor-link :key="node.id"
-                                     :href="node.path"
-                                     :title="node.title"/>
-                    </template>
+                    <a-anchor-link v-for="node in item.children" :key="node.id"
+                                   :href="node.path"
+                                   :title="node.title"/>
                   </a-anchor-link>
 
                 </a-anchor>
@@ -70,58 +67,7 @@
               </div>
             </a-tab-pane>
             <a-tab-pane key="2" tab="评论" force-render>
-              <a-comment style="height: 100%;overflow-y: scroll">
-                <span slot="actions" key="comment-nested-reply-to">Reply to</span>
-                <a slot="author">Han Solo</a>
-                <a-avatar
-                  slot="avatar"
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                  alt="Han Solo"
-                />
-                <p slot="content">
-                  We supply a series of design principles, practical patterns and high quality design resources
-                  (Sketch and Axure).
-                </p>
-                <a-comment>
-                  <span slot="actions">Reply to</span>
-                  <a slot="author">Han Solo</a>
-                  <a-avatar
-                    slot="avatar"
-                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                    alt="Han Solo"
-                  />
-                  <p slot="content">
-                    We supply a series of design principles, practical patterns and high quality design
-                    resources (Sketch and Axure).
-                  </p>
-                  <a-comment>
-                    <span slot="actions">Reply to</span>
-                    <a slot="author">Han Solo</a>
-                    <a-avatar
-                      slot="avatar"
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      alt="Han Solo"
-                    />
-                    <p slot="content">
-                      We supply a series of design principles, practical patterns and high quality design
-                      resources (Sketch and Axure).
-                    </p>
-                  </a-comment>
-                  <a-comment>
-                    <span slot="actions">Reply to</span>
-                    <a slot="author">Han Solo</a>
-                    <a-avatar
-                      slot="avatar"
-                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                      alt="Han Solo"
-                    />
-                    <p slot="content">
-                      We supply a series of design principles, practical patterns and high quality design
-                      resources (Sketch and Axure).
-                    </p>
-                  </a-comment>
-                </a-comment>
-              </a-comment>
+
             </a-tab-pane>
           </a-tabs>
         </div>
@@ -134,16 +80,17 @@
 import $ from "jquery";
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
-import marked from "marked";
-import "highlight.js/styles/github-dark.css"
+
+//import "highlight.js/styles/github-dark.css"
 import fetch from "../../api/fetch";
-import hljs from "highlight.js";
-import WxRenderer from "../../plugins/wx-renderer";
+
 import utils from "../../utils/utils"
 import javascript from 'highlight.js/lib/languages/javascript';
 import java from 'highlight.js/lib/languages/java';
-
+import hljs from "highlight.js";
 import xml from "highlight.js/lib/languages/xml"
+import marked from "marked";
+import WxRenderer from "../../plugins/wx-renderer";
 
 const rendererMD = new marked.Renderer();
 marked.setOptions({
@@ -182,18 +129,10 @@ export default {
     const path = this.$route.path
     const fileId = path.split("/notes/markdownView/")[1];
     if (fileId === null || fileId === "") {
-      // this.$router.replace({})
+      this.$router.push("/notes/error")
     } else {
       this.getFileInfo(fileId);
     }
-    hljs.highlightAll();
-    hljs.initHighlighting();
-
-    hljs.registerLanguage("javascript", javascript);
-
-    hljs.registerLanguage("java", java);
-    hljs.registerLanguage("xml", xml);
-
   },
   mounted() {
     const _this = this;
@@ -203,29 +142,18 @@ export default {
       _this.imgClick(e, e.currentTarget.currentSrc)
     });
 
-
     $("#output").delegate(".code-body", "mouseover", function (e) {
-      //console.log(e.currentTarget.children[1])
 
       e.currentTarget.children[0].children[1].style.display = "block";
-      //_this.imgClick(e, e.currentTarget.currentSrc)
     });
     $("#output").delegate(".code-body", "mouseout", function (e) {
-      //console.log(e.currentTarget.children[1])
-
-      //if (e.currentTarget.children[0].c && e.currentTarget.children.length === 2) {
       e.currentTarget.children[0].children[1].style.display = "none";
-      //   }
-      //_this.imgClick(e, e.currentTarget.currentSrc)
+      e.currentTarget.children[0].children[1].innerText = "复制"
+
     });
     $("#output").delegate(".copy-code", "click", function (e) {
       const codeNodes = e.currentTarget.parentNode.parentNode.querySelector("code");
-     /* let code = '';
-      codeNodes.forEach(item => {
-        let str = item.innerText.replace(/\r\n/g, " ");
-        str = str.replace(/\n/g, " ");
-        code += str + "\n";
-      })*/
+      e.currentTarget.innerText = "已复制";
       utils.copy(codeNodes.innerText, e, _this);
     })
 
@@ -243,8 +171,8 @@ export default {
       element.setAttribute("rel", "stylesheet");
       element.setAttribute("type", "text/css");
       element.setAttribute(
-        "href",
-        `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/${this.cssName}.min.css`
+          "href",
+          `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/${this.cssName}.min.css`
       );
       document.getElementsByTagName("head")[0].appendChild(element);
     },
@@ -254,10 +182,11 @@ export default {
       let elements = document.getElementsByTagName(element);
       for (let i = elements.length; i >= 0; i--) {
         if (
-          elements[i] &&
-          elements[i].getAttribute(attr) != null &&
-          elements[i].getAttribute(attr).indexOf(cssName) !== -1
+            elements[i] &&
+            elements[i].getAttribute(attr) != null &&
+            elements[i].getAttribute(attr).indexOf(cssName) !== -1
         ) {
+          console.log("remove:->" + elements[i].href)
           elements[i].parentNode.removeChild(elements[i]);
         }
       }
@@ -272,8 +201,12 @@ export default {
           // this.fileList = response.data;
           this.mdContent = response.data.fileSource;
           const option = response.data.fileConfig;
+
+          sessionStorage.setItem("file_config", JSON.stringify(option));
           this.fileTitle = response.data.fileName;
           // this.mdContent = formatDoc(this.mdContent);
+          this.cssName = option.themeType ? option.themeType : "github";
+          this.loadCss();
           let output = marked(this.mdContent, {
             renderer: new WxRenderer({
               cssTheme: option.themeType,
@@ -286,20 +219,21 @@ export default {
               return hljs.highlightAuto(code).value;
             }
           });
-         // this.removeCss(this.cssName);
-          this.cssName = option.themeType;
-        //  this.loadCss();
           this.html = output;
           this.mdTitle = JSON.parse(localStorage.getItem("md_title_data"));
           this.initMd = false;
           this.addCopy();
 
+          document.getElementsByClassName("ant-anchor-ink-ball")[0].style.display = "block";
+          document.getElementsByClassName("ant-anchor-ink-ball")[0].style.top = "10px";
+          document.getElementsByClassName("ant-anchor-wrapper")[0].style.marginLeft = "0";
+
           document.getElementsByClassName("ant-tabs-content")[0].style.height = "90%";
         }
       })
-        .catch(error => {
-          console.log(error)
-        });
+          .catch(error => {
+            console.log(error)
+          });
     },
     handleMenuClick(e) {
       if (e.key === "1") {
@@ -356,22 +290,18 @@ export default {
       });
     },
     addCopy() {
-      console.log("copy")
-      /*.forEach(item => {
-          console.log(item);
-      })*/
-      console.log(this.$refs.mdHtml.children)
-      //  console.log("结果",document.getElementById("previewHtml").getElementsByTagName("code"));
-      //<i class="iconfont icon-fuzhi" style="position: absolute;background: #fff;padding: 3px;border-radius: 3px;font-size: 21px;right: 3px"></code>`;
     },
     getUuid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
-          v = c === 'x' ? r : (r & 0x3 | 0x8);
+            v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
 
     }
+  },
+  destroyed() {
+    this.removeCss(this.cssName)
   }
 }
 </script>
@@ -455,6 +385,10 @@ export default {
 
 .back-top:hover {
   cursor: pointer
+}
+
+.ant-anchor-ink-ball {
+  display: block !important;
 }
 
 #output-wrapper {
