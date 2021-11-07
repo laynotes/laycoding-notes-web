@@ -1,9 +1,49 @@
 import copyText from "../plugins/clipboard";
-
 import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
+import md5 from 'js-md5';
+/*import {
+  fixCodeWhiteSpace,
+} from "@/assets/scripts/util";
+import {solveWeChatImage, solveHtml} from "@/assets/scripts/converter";
+*/
 
 const utils = {};
+
+utils.copyWeChat = (vue,html) => {
+  vue.$emit("startCopy");
+  setTimeout(() => {
+    let clipboardDiv = document.getElementById("output");
+    solveWeChatImage();
+  //  fixCodeWhiteSpace();
+    solveHtml();
+    clipboardDiv.focus();
+    window.getSelection().removeAllRanges();
+    let range = document.createRange();
+
+    range.setStartBefore(clipboardDiv.firstChild);
+    range.setEndAfter(clipboardDiv.lastChild);
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    fixCodeWhiteSpace("normal");
+
+    clipboardDiv.innerHTML = html;
+
+
+    //  console.log(this.output);
+    // 输出提示
+    vue.$notify({
+      showClose: true,
+      message: "已复制渲染后的文章到剪贴板，可直接到公众号后台粘贴",
+      offset: 80,
+      duration: 1600,
+      type: "success",
+    });
+    //  vm.$emit("refresh");
+    //  vm.$emit("endCopy");
+  }, 350);
+}
 
 utils.getPdf = function (id, title = "未命名") {
   let dom = document.querySelector(`#${id}`);
@@ -43,17 +83,12 @@ utils.getPdf = function (id, title = "未命名") {
   )
 }
 
-
-utils.getUUID = function () {
-  return uuid.v1();
-}
-
 utils.copy = function (text, e, vue) {
   copyText(text, e, vue)
 }
 utils.downloadMD = function (doc, title = "content") {
-  let downLink = document.createElement("a");
 
+  let downLink = document.createElement("a");
   downLink.download = title + ".md";
   downLink.style.display = "none";
   let blob = new Blob([doc]);
@@ -120,4 +155,7 @@ export function checkImage(file) {
 }
 
 
+utils.getMd5 = function (content) {
+  return md5(content);
+}
 export default utils;

@@ -2,7 +2,7 @@
 import default_theme from "./themes/default-theme";
 import prettier from "prettier/standalone";
 import prettierMarkdown from "prettier/parser-markdown";
-import prettierCss from "prettier/parser-postcss";
+
 import prettierHtml from "prettier/parser-html";
 
 // 设置自定义颜色

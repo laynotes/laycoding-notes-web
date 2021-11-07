@@ -62,9 +62,6 @@ import md5 from 'js-md5';
 import LayEditor from "@/components/layeditor/index/lay-editor";
 import utils from "@/utils/utils";
 import fetch from "@/api/fetch";
-import marked from "marked";
-import WxRenderer from "@/plugins/wx-renderer";
-import hljs from "highlight.js";
 
 export default {
   // eslint-disable-next-line vue/no-unused-components
@@ -108,9 +105,6 @@ export default {
   mounted() {
     const path = this.$route.path;
     const pathArr = path.split("/markdown/");
-
-    console.log(pathArr)
-    //const userInfo = {};
     if (!sessionStorage.getItem("state") || !JSON.parse(sessionStorage.getItem("state")).userInfo) {
       this.$Message.error("非法请求~");
       let _that = this;
@@ -166,9 +160,7 @@ export default {
     loadMd: function () {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i); //获取本地存储的Key
-        //   console.log("key:" + key)
         if (key.endsWith("_md")) {
-          //  console.log("结尾:" + key)
           if (key.startsWith(this.fileId)) {
             this.value = localStorage.getItem(key);
           } else {
@@ -182,26 +174,16 @@ export default {
       sessionStorage.setItem(this.fileId + "_user", JSON.stringify(this.userInfo));
     },
     save: function (val) {
-      // 获取预览文本
-      //console.log(this.value) // 这里是原markdown文本
-      //console.log(val) ;// 这个是解析出的html
-      //const markdown = "@[TOC](导航)" + "\n " + this.value;
       utils.copyWeChat(this, val)
-      // this.encryptStr();
       const fileMd5 = md5(this.value);
-      console.log(fileMd5)
       if (fileMd5 === this.fileMd5) {
-        //  this.$Message.info("内容未改变~");
-        //return;
       } else {
         if (this.fileMd5 === fileMd5 || this.isEditor) {
           if (this.isReqest) return;
           this.isReqest = true;
           this.insertFile();
         } else {
-          //this.fileMd5 = fileMd5;
           this.updateMd5 = fileMd5;
-
           this.onLoadData();
           this.modal1Visible = true;
         }
@@ -220,7 +202,6 @@ export default {
       });
     },
     saveInfo() {
-      console.log(this.fileName + "---" + this.folderName + "---" + this.labelSelected);
       this.insertFile();
     },
     insertFile() {

@@ -6,7 +6,7 @@
       <a-col :sm="24" :md="20" :lg="20" :xl="20" style="padding: 10px;height: 100%;">
         <div style="display: flex;flex-direction: column;height: 100%">
           <div
-              style="width: 100%;height: 50px;border-bottom: 1px solid #e8e8e8;line-height: 50px;display: flex;justify-content: space-between">
+            style="width: 100%;height: 50px;border-bottom: 1px solid #e8e8e8;line-height: 50px;display: flex;justify-content: space-between">
             <div>
 
             </div>
@@ -31,7 +31,7 @@
             </div>
           </div>
           <section
-              id="output-wrapper"
+            id="output-wrapper"
           >
             <div class="preview_html" id="previewHtml">
               <div id="output" v-html="html" ref="mdHtml"></div>
@@ -137,8 +137,6 @@ export default {
   mounted() {
     const _this = this;
     $("#output").delegate("img", "click", function (e) {
-      console.log(e.currentTarget.currentSrc);
-      console.log(e.target);
       _this.imgClick(e, e.currentTarget.currentSrc)
     });
 
@@ -149,7 +147,6 @@ export default {
     $("#output").delegate(".code-body", "mouseout", function (e) {
       e.currentTarget.children[0].children[1].style.display = "none";
       e.currentTarget.children[0].children[1].innerText = "复制"
-
     });
     $("#output").delegate(".copy-code", "click", function (e) {
       const codeNodes = e.currentTarget.parentNode.parentNode.querySelector("code");
@@ -161,18 +158,15 @@ export default {
       document.getElementById("output-wrapper").addEventListener('scroll', this.handleScroll);
       this.view = document.getElementById("output-wrapper");
     }
-
-
   },
   methods: {
-    //<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
     loadCss() {
       let element = document.createElement("link");
       element.setAttribute("rel", "stylesheet");
       element.setAttribute("type", "text/css");
       element.setAttribute(
-          "href",
-          `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/${this.cssName}.min.css`
+        "href",
+        `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/${this.cssName}.min.css`
       );
       document.getElementsByTagName("head")[0].appendChild(element);
     },
@@ -182,9 +176,9 @@ export default {
       let elements = document.getElementsByTagName(element);
       for (let i = elements.length; i >= 0; i--) {
         if (
-            elements[i] &&
-            elements[i].getAttribute(attr) != null &&
-            elements[i].getAttribute(attr).indexOf(cssName) !== -1
+          elements[i] &&
+          elements[i].getAttribute(attr) != null &&
+          elements[i].getAttribute(attr).indexOf(cssName) !== -1
         ) {
           console.log("remove:->" + elements[i].href)
           elements[i].parentNode.removeChild(elements[i]);
@@ -198,13 +192,10 @@ export default {
       }).then(response => {
         console.log(response.data)
         if (response.code === 0) {
-          // this.fileList = response.data;
           this.mdContent = response.data.fileSource;
           const option = response.data.fileConfig;
-
           sessionStorage.setItem("file_config", JSON.stringify(option));
           this.fileTitle = response.data.fileName;
-          // this.mdContent = formatDoc(this.mdContent);
           this.cssName = option.themeType ? option.themeType : "github";
           this.loadCss();
           let output = marked(this.mdContent, {
@@ -223,17 +214,14 @@ export default {
           this.mdTitle = JSON.parse(localStorage.getItem("md_title_data"));
           this.initMd = false;
           this.addCopy();
-
           document.getElementsByClassName("ant-anchor-ink-ball")[0].style.display = "block";
           document.getElementsByClassName("ant-anchor-ink-ball")[0].style.top = "10px";
           document.getElementsByClassName("ant-anchor-wrapper")[0].style.marginLeft = "0";
-
           document.getElementsByClassName("ant-tabs-content")[0].style.height = "90%";
         }
-      })
-          .catch(error => {
-            console.log(error)
-          });
+      }).catch(error => {
+        console.log(error)
+      });
     },
     handleMenuClick(e) {
       if (e.key === "1") {
@@ -294,7 +282,7 @@ export default {
     getUuid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
-            v = c === 'x' ? r : (r & 0x3 | 0x8);
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
 

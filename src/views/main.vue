@@ -583,8 +583,6 @@ export default {
           });
         }
       }
-
-      // this.visible = true;
     },
     renameOpreation(id, type, name) {
       this.$prompt('请输入新名称', '提示', {

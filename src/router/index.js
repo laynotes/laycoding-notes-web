@@ -19,6 +19,14 @@ const router = new VueRouter({
       }
     },
     {
+      path: "/draw/**",
+      name: "drawEditor",
+      component: () => import('../views/draw/draw.vue'),
+      meta: {
+        title: "流程图 | 来码笔记"
+      }
+    },
+    {
       path: '/main',
       name: 'main',
       component: () => import('../views/main'),
