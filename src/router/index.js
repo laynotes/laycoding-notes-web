@@ -27,6 +27,14 @@ const router = new VueRouter({
       }
     },
     {
+      path: "/mind/**",
+      name: "mindEditor",
+      component: () => import('../views/mind/mind.vue'),
+      meta: {
+        title: "脑图 | 来码笔记"
+      }
+    },
+    {
       path: '/main',
       name: 'main',
       component: () => import('../views/main'),
@@ -35,6 +43,16 @@ const router = new VueRouter({
           path: "/notes/markdownView/**",
           name: "markdownView",
           component: () => import("../views/markdown/markdown")
+        },
+        {
+          path: "/notes/drawView/**",
+          name: "drawView",
+          component: () => import("../views/draw/drawView")
+        },
+        {
+          path: "/notes/mindView/**",
+          name: "mindView",
+          component: () => import("../views/mind/mindView")
         },
         {
           path: "/notes/error",
