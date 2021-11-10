@@ -742,7 +742,7 @@ export default {
         const obj = document.getElementsByClassName("x6-widget-minimap")[0];
         obj.style.position = "fixed";
         obj.style.bottom = "20px";
-        obj.style.right = "350px";
+        obj.style.right = "10px";
         obj.style.zIndex = 9999;
 
         const objS = document.getElementsByClassName("x6-graph-scroller")[0];
@@ -1197,7 +1197,7 @@ export default {
   width: 25%;
   overflow: auto;
   background: #fff;
-  z-index: 100000;
+  z-index: 100;
 }
 
 #headPanel {
