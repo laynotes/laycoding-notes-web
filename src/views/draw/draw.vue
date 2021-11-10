@@ -629,7 +629,7 @@ export default {
         }),
         500
       );
-      graph.on('cell:dblclick', ({ cell, e }) => {
+      graph.on('cell:dblclick', ({cell, e}) => {
         if (!cell.isEdge()) return;
         cell.addTools([
           {
@@ -746,8 +746,15 @@ export default {
         obj.style.zIndex = 9999;
 
         const objS = document.getElementsByClassName("x6-graph-scroller")[0];
-        objS.style.width = (this.screenWidth - 540) + "px";
+        objS.style.width = (this.screenWidth - 532) + "px";
         objS.style.height = (this.screenHeigth - 64) + "px";
+        objS.style.position = "relative";
+        objS.style.left = "208px";
+        objS.style.top = "60px";
+        objS.style.right = "300px";
+        objS.style.boxSizing = "border-box";
+        objS.style.overflow = "scroll";
+        objS.style.outline = "none";
       } catch (e) {
         console.log(e);
       }
@@ -1244,16 +1251,6 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 999;
-}
-
-.x6-graph-scroller {
-  position: relative;
-  left: 208px;
-  top: 60px;
-  right: 300px;
-  box-sizing: border-box;
-  overflow: scroll;
-  outline: none;
 }
 
 .btn-group {
