@@ -27,6 +27,14 @@ const router = new VueRouter({
       }
     },
     {
+      path: "/excel/**",
+      name: "excelEditor",
+      component: () => import('../views/excel/excelEditor'),
+      meta: {
+        title: "表格 | 来码笔记"
+      }
+    },
+    {
       path: "/mind/**",
       name: "mindEditor",
       component: () => import('../views/mind/mind.vue'),

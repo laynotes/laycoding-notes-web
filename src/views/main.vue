@@ -48,10 +48,16 @@
               <span style="margin-left: 10px">脑&nbsp;&nbsp;图</span>
             </a-menu-item>
             <a-menu-divider/>
+            <a-menu-item key="3" style="display: flex;flex-direction: row;">
+              <i class="iconfont icon-wenjianjia2"></i>
+              <span style="margin-left: 10px">表&nbsp;&nbsp;格</span>
+            </a-menu-item>
+            <a-menu-divider/>
             <a-menu-item key="-1" style="display: flex;flex-direction: row;">
               <i class="iconfont icon-wenjianjia2"></i>
               <span style="margin-left: 10px">文件夹</span>
             </a-menu-item>
+
           </a-menu>
         </a-dropdown>
       </div>
@@ -799,6 +805,7 @@ export default {
           path = "/mind/";
           break;
         default:
+          path = "/excel/";
           break;
       }
       const {href} = this.$router.resolve({
