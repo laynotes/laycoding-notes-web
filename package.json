@@ -57,7 +57,9 @@
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-uuid": "^2.0.2",
+    "luckyexcel": "^1.0.0",
     "vuedraggable": "^2.24.3",
+    "core-js": "^3.6.5",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

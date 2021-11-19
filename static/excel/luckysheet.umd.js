@@ -2873,9 +2873,7 @@ field\u53EF\u4EE5\u662F\u8207database\u7B2C\u4E00\u884C\u4E2D\u67D0\u500B\u5217\
                             <div class="sheet-name"> 
                                 <input data-tips="${a.tips}" id="luckysheet_info_detail_input" class="luckysheet_info_detail_input luckysheet-mousedown-cancel" value="${a.noName}" tabindex="0" dir="ltr" aria-label="${a.rename}" style="visibility: visible; width: 149px;" data-tooltip="${a.rename}"> 
                             </div> 
-                            <div id="luckysheet_info_detail_update" class="luckysheet_info_detail_update"> ${a.detailUpdate} </div> 
-                            <div id="luckysheet_info_detail_save" class="luckysheet_info_detail_save"> ${a.wait} </div>
-                            
+                      
                             \${functionButton}
                             
                             ${N(l)==="string"?`<div class="luckysheet_info_detail_user">
