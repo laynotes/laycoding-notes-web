@@ -9,7 +9,6 @@ class WxRenderer {
   constructor(opts) {
     this.opts = opts;
     localStorage.setItem("opt_config", JSON.stringify(opts));
-    const cssTheme = opts.cssTheme ? opts.cssTheme : "github";
     let ENV_STRETCH_IMAGE = true;
     let footnotes = [];
     let footnoteIndex = 0;

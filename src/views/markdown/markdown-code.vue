@@ -227,9 +227,7 @@ export default {
         },
         data: data
       }).then(response => {
-
         this.fileMd5 = this.updateMd5;
-        console.log("上传结果:", response);
         this.modal1Visible = false;
         this.isReqest = false;
       }).catch(error => {

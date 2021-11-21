@@ -49,9 +49,16 @@
             </a-menu-item>
             <a-menu-divider/>
             <a-menu-item key="3" style="display: flex;flex-direction: row;">
-              <i class="iconfont icon-wenjianjia2"></i>
+              <i class="iconfont icon-excel"></i>
               <span style="margin-left: 10px">表&nbsp;&nbsp;格</span>
             </a-menu-item>
+            <a-menu-divider/>
+            <a-menu-item key="4" style="display: flex;flex-direction: row;">
+              <i class="iconfont icon-huaban"></i>
+              <span style="margin-left: 10px">画&nbsp;&nbsp;板</span>
+            </a-menu-item>
+
+
             <a-menu-divider/>
             <a-menu-item key="-1" style="display: flex;flex-direction: row;">
               <i class="iconfont icon-wenjianjia2"></i>
@@ -804,8 +811,13 @@ export default {
         case 2:
           path = "/mind/";
           break;
-        default:
+        case 3:
           path = "/excel/";
+          break;
+        case 4:
+          path = "/canvas/";
+          break;
+        default:
           break;
       }
       const {href} = this.$router.resolve({

@@ -35,6 +35,14 @@ const router = new VueRouter({
       }
     },
     {
+      path: "/canvas/**",
+      name: "canvasEditor",
+      component: () => import('../views/canvas/canvasEditor'),
+      meta: {
+        title: "画板 | 来码笔记"
+      }
+    },
+    {
       path: "/mind/**",
       name: "mindEditor",
       component: () => import('../views/mind/mind.vue'),

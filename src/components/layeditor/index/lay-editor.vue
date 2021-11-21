@@ -100,6 +100,8 @@ import sql from "highlight.js/lib/languages/sql"
 import marked from "marked";
 import WxRenderer from "@/plugins/wx-renderer";
 
+import themeOption from "./default-theme";
+
 import "highlight.js/styles/github-dark.css"
 import service from "@/api/fetch";
 
@@ -205,7 +207,7 @@ export default {
       contextMenuTarget: null, //绑定的dom
       contextMenuVisible: false,
       imagePattern: /^!\[(.*)\]\((.*)\)$/,
-      linkImagePattern: /^\[!\[(.*)\]\((.*)\)\]\(.*\)$/,
+      linkImagePattern: /^\[!\[(.*)\]\((.*)\)\]\(.*\)$/
     }
   },
   watch: {
@@ -377,14 +379,13 @@ export default {
     }
     ,
     review() {
+      console.log(themeOption)
       const option = JSON.parse(sessionStorage.getItem("file_config"));
+      console.log(option);
       let output = marked(this.origin, {
         renderer: new WxRenderer({
-          cssTheme: option.themeType,
-          theme: option.theme,
-          fonts: option.currentFont,
-          size: option.currentSize,
-          status: option.citeStatus,
+          cssTheme: "github-dark",
+          theme: themeOption,
         }).getRenderer(false),
         highlight: function (code) {
           return hljs.highlightAuto(code).value;
@@ -537,11 +538,9 @@ export default {
 
       let output = marked(this.origin, {
         renderer: new WxRenderer({
-          cssTheme: option.themeType,
-          theme: option.theme,
-          fonts: option.currentFont,
-          size: option.currentSize,
-          status: option.citeStatus,
+          
+          theme: themeOption,
+
         }).getRenderer(false),
         highlight: function (code) {
           return hljs.highlightAuto(code).value;

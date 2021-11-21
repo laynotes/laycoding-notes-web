@@ -28,6 +28,7 @@
     "js-md5": "^0.7.3",
     "jsencrypt": "^3.2.1",
     "jspdf": "^2.4.0",
+    "fabric": "^4.4.0",
     "juice": "^8.0.0",
     "le-markdown-editor": "^1.1.4",
     "less-loader": "^5.0.0",
