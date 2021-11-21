@@ -148,7 +148,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #preview {
   position: relative;
   margin: 0 -20px;
@@ -158,6 +158,15 @@ export default {
   box-sizing: border-box;
   outline: none;
   box-shadow: 0 0 60px rgb(0 0 0 / 10%);
+
+}
+.markdown-body{
+  padding: 0 5px;
+  overflow-y: auto;
+  /* position: absolute; */
+  overflow-x: hidden;
+  height: 100%;
+
 
 }
 </style>

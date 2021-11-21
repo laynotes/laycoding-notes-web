@@ -116,4 +116,5 @@ export default {
 .CodeMirror-hint:hover {
   background: #f0f0f0;
 }
+::-webkit-scrollbar{width:2px;}
 </style>

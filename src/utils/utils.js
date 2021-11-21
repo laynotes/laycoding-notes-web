@@ -2,11 +2,9 @@ import copyText from "../plugins/clipboard";
 import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
 import md5 from 'js-md5';
-/*import {
-  fixCodeWhiteSpace,
-} from "@/assets/scripts/util";
+;
 import {solveWeChatImage, solveHtml} from "@/assets/scripts/converter";
-*/
+
 
 const utils = {};
 
@@ -15,7 +13,7 @@ utils.copyWeChat = (vue,html) => {
   setTimeout(() => {
     let clipboardDiv = document.getElementById("output");
     solveWeChatImage();
-  //  fixCodeWhiteSpace();
+    fixCodeWhiteSpace();
     solveHtml();
     clipboardDiv.focus();
     window.getSelection().removeAllRanges();
@@ -44,7 +42,14 @@ utils.copyWeChat = (vue,html) => {
     //  vm.$emit("endCopy");
   }, 350);
 }
-
+function fixCodeWhiteSpace(value = "pre") {
+  const preDomList = document.getElementsByClassName("code__pre");
+  if (preDomList.length > 0) {
+    preDomList.forEach((pre) => {
+      pre.style.whiteSpace = value;
+    });
+  }
+}
 utils.getPdf = function (id, title = "未命名") {
   let dom = document.querySelector(`#${id}`);
   html2Canvas(dom, {
